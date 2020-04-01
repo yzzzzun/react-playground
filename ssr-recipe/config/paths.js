@@ -8,6 +8,13 @@ const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 
 const envPublicUrl = process.env.PUBLIC_URL;
+const getPublicUrlOrPath = require("react-dev-utils/getPublicUrlOrPath");
+
+const publicUrlOrPath = getPublicUrlOrPath(
+  process.env.NODE_ENV === "development",
+  require(resolveApp("package.json")).homepage,
+  process.env.PUBLIC_URL
+);
 
 function ensureSlash(inputPath, needsSlash) {
   const hasSlash = inputPath.endsWith("/");
@@ -82,7 +89,8 @@ module.exports = {
   publicUrl: getPublicUrl(resolveApp("package.json")),
   servedPath: getServedPath(resolveApp("package.json")),
   ssrIndexJs: resolveApp("src/index.server.js"),
-  ssrBuild: resolveApp("dist")
+  ssrBuild: resolveApp("dist"),
+  publicUrlOrPath
 };
 
 module.exports.moduleFileExtensions = moduleFileExtensions;
